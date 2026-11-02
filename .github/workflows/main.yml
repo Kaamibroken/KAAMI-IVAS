@@ -22,6 +22,11 @@ jobs:
           distribution: temurin
           java-version: '17'
 
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
       - name: Download Android command-line tools
         run: |
           mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools"
