@@ -57,4 +57,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: KAAMI-IVAS-debug-apk
-          path: kaami-ivas/app/build/outputs/apk/debug/*.apk
+          path: KAAMI-IVAS-App/kaami-ivas/app/build/outputs/apk/debug/*.apk
