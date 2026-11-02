@@ -27,7 +27,6 @@ jobs:
         with:
           python-version: '3.12'
 
-      # Yeh naya step add kiya hai jo Chaquopy ke liye zaroori hai:
       - name: Install Python venv and dev headers
         run: |
           sudo apt-get update
@@ -62,7 +61,9 @@ jobs:
 
       - name: Build debug APK
         working-directory: KAAMI-IVAS-App/kaami-ivas
-        run: gradle assembleDebug --no-daemon --stacktrace
+        run: gradle assembleDebug --no-daemon --stacktrace --info
+        env:
+          ORG_GRADLE_PROJECT_jvmargs: "-Xmx4g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8"
 
       - name: Check APK existence
         run: |
