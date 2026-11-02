@@ -49,15 +49,17 @@ jobs:
         with:
           gradle-version: 8.7
 
-      - name: Build debug APK
+       - name: Build debug APK
         working-directory: KAAMI-IVAS-App/kaami-ivas
-        run: gradle assembleDebug --no-daemon --stacktrace --debug
+        run: gradle assembleDebug --no-daemon --stacktrace
 
-      - name: Find and Upload APK
+      - name: List APK Directory (Debug)
+        run: find . -name "*.apk"
+
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: KAAMI-IVAS-debug-apk
           path: |
             KAAMI-IVAS-App/kaami-ivas/app/build/outputs/apk/debug/*.apk
-            app/build/outputs/apk/debug/*.apk
             **/build/outputs/apk/debug/*.apk
