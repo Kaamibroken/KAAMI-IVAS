@@ -1,4 +1,5 @@
 name: Build APK
+
 on:
   workflow_dispatch:
   push:
@@ -44,7 +45,7 @@ jobs:
       - name: Accept SDK licenses and install components
         run: |
           export PATH="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$PATH"
-          yes | sdkmanager --licenses
+          yes | sdkmanager --licenses > /dev/null || true
           sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
 
       - name: Set up Gradle 8.7
@@ -54,20 +55,21 @@ jobs:
 
       - name: Build debug APK
         working-directory: KAAMI-IVAS-App/kaami-ivas
-        run: gradle assembleDebug --no-daemon --debug
-        env:
-          ORG_GRADLE_PROJECT_jvmargs: "-Xmx4g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8"
-
-      - name: Dump Kotlin compiler output logs
-        if: always()
+        shell: bash
         run: |
-          echo "Checking kotlin compiler logs..."
-          find KAAMI-IVAS-App/kaami-ivas -name "*.log" -o -name "compileDebugKotlin*.txt" | while read logfile; do
-            echo "=== FOUND LOG: $logfile ==="
-            cat "$logfile"
-          done
+          set -o pipefail
+          gradle assembleDebug --no-daemon --stacktrace 2>&1 | tee build.log
+
+      - name: Upload build log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log
+          path: KAAMI-IVAS-App/kaami-ivas/build.log
+          if-no-files-found: ignore
 
       - name: Check APK existence
+        if: always()
         run: |
           echo "Checking built APKs:"
           find KAAMI-IVAS-App/kaami-ivas -name "*.apk" || true
