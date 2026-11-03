@@ -54,7 +54,7 @@ jobs:
 
       - name: Build debug APK
         working-directory: KAAMI-IVAS-App/kaami-ivas
-        run: gradle assembleDebug --no-daemon --stacktrace --info --continue -Dorg.gradle.daemon.idletimeout=10000
+        run: gradle assembleDebug --no-daemon --debug
         env:
           ORG_GRADLE_PROJECT_jvmargs: "-Xmx4g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8"
 
