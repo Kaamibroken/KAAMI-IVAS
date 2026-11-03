@@ -54,7 +54,7 @@ jobs:
 
       - name: Build debug APK
         working-directory: KAAMI-IVAS-App/kaami-ivas
-        run: gradle assembleDebug --no-daemon --stacktrace --info -Pkotlin.incremental=false
+        run: gradle assembleDebug --no-daemon --stacktrace -Pkotlin.compiler.executionStrategy=in-process
         env:
           ORG_GRADLE_PROJECT_jvmargs: "-Xmx4g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8"
 
