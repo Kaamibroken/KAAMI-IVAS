@@ -59,9 +59,12 @@ jobs:
           echo "Checking built APKs:"
           find KAAMI-IVAS-App/kaami-ivas -name "*.apk" || true
 
+     - name: Build debug APK
+        working-directory: kaami-ivas
+        run: gradle assembleDebug --no-daemon --stacktrace
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: KAAMI-IVAS-debug-apk
-          path: KAAMI-IVAS-App/kaami-ivas/app/build/outputs/apk/debug/*.apk
-          if-no-files-found: ignore
+          path: kaami-ivas-App/app/build/outputs/apk/debug/*.apk
