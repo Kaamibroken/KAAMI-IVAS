@@ -54,14 +54,21 @@ jobs:
 
       - name: Build debug APK
         working-directory: KAAMI-IVAS-App/kaami-ivas
-        run: gradle assembleDebug --no-daemon --stacktrace --console=plain
+        run: gradle assembleDebug --no-daemon --stacktrace --info -Pkotlin.incremental=false
         env:
           ORG_GRADLE_PROJECT_jvmargs: "-Xmx4g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8"
 
       - name: Show Kotlin compilation error log
         if: failure()
         run: |
-          find KAAMI-IVAS-App/kaami-ivas/app/build -name "*.log" -exec cat {} + || true
+          echo "=== SEARCHING FOR KOTLIN COMPILER OUTPUT / ERRORS ==="
+          find KAAMI-IVAS-App/kaami-ivas/app/build -name "*.txt" -o -name "*.xml" -o -name "*.html" | while read file; do
+            echo "FILE: $file"
+            cat "$file"
+          done
+          echo "=== CHECKING GRADLE KOTLIN WORKER OUTPUT ==="
+          cat KAAMI-IVAS-App/kaami-ivas/app/build/reports/problems/problems.html || true
+          find KAAMI-IVAS-App/kaami-ivas -name "*.log" -exec tail -n 100 {} \; || true
 
       - name: Check APK existence
         run: |
